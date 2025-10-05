@@ -128,7 +128,7 @@ export function useUpbitWebSocket() {
       try {
         const marketsParam = codesToSubscribe.join(',')
         console.log('Fallback to REST API with markets:', marketsParam)
-        const response = await axios.get(`https://api.upbit.com/v1/ticker?markets=${marketsParam}`)
+        const response = await axios.get(`https://cors.iinfo.kr:7403/https://api.upbit.com/v1/ticker?markets=${marketsParam}`)
         console.log('REST API Response:', response.data)
       } catch (apiError) {
         console.error('REST API also failed:', apiError)
