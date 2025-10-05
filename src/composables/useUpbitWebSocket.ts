@@ -18,17 +18,17 @@ export function useUpbitWebSocket() {
 
   // 거래액을 억/조 단위로 변환
   const formatTradeAmount = (amount: number): string => {
-    const 억 = 100000000
-    const 조 = 1000000000000
+    const hundredMillion = 100000000
+    const trillion = 1000000000000
 
-    if (amount < 억) return '1억'
+    if (amount < hundredMillion) return '1억'
 
-    if (amount >= 조) {
-      const value = Math.floor(amount / 조)
+    if (amount >= trillion) {
+      const value = Math.floor(amount / trillion)
       return `${value.toLocaleString()}조`
     }
 
-    const value = Math.floor(amount / 억)
+    const value = Math.floor(amount / hundredMillion)
     return `${value.toLocaleString()}억`
   }
 
@@ -133,7 +133,7 @@ export function useUpbitWebSocket() {
         if (webSocket?.readyState === WebSocket.CLOSED) {
           await connect(symbols)
         }
-      }, 5000)
+      }, 1000)
     }
   }
 
