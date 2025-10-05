@@ -62,7 +62,8 @@ export function useUpbitWebSocket() {
     const codesToSubscribe = symbols || Object.values(markets.value)
       .filter(m => m.market.startsWith('KRW-'))
       .map(m => m.market);
-    webSocket = new WebSocket('https://api.upbit.com/websocket/v1');
+
+    webSocket = new WebSocket('wss://api.upbit.com/websocket/v1');
 
 
     webSocket.onopen = () => {
@@ -119,9 +120,19 @@ export function useUpbitWebSocket() {
       })
     }
 
-    webSocket.onerror = (error) => {
-      console.error('Upbit WebSocket error:', error)
-      coinStore.setConnected(false)
+    webSocket.onerror = async (error) => {
+      console.error('Upbit WebSocket error:', error);
+      coinStore.setConnected(false);
+
+      // WebSocket 연결 실패 시 REST API로 fallback 테스트
+      try {
+        const marketsParam = codesToSubscribe.join(',')
+        console.log('Fallback to REST API with markets:', marketsParam)
+        const response = await axios.get(`https://api.upbit.com/v1/ticker?markets=${marketsParam}`)
+        console.log('REST API Response:', response.data)
+      } catch (apiError) {
+        console.error('REST API also failed:', apiError)
+      }
     }
 
     webSocket.onclose = () => {
@@ -133,7 +144,7 @@ export function useUpbitWebSocket() {
         if (webSocket?.readyState === WebSocket.CLOSED) {
           await connect(symbols)
         }
-      }, 3000)
+      }, 5000)
     }
   }
 
