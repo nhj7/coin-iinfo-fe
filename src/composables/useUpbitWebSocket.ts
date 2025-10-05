@@ -133,7 +133,7 @@ export function useUpbitWebSocket() {
         if (webSocket?.readyState === WebSocket.CLOSED) {
           await connect(symbols)
         }
-      }, 1000)
+      }, 3000)
     }
   }
 
