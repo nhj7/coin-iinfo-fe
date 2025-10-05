@@ -62,7 +62,7 @@ export function useUpbitWebSocket() {
     const codesToSubscribe = symbols || Object.values(markets.value)
       .filter(m => m.market.startsWith('KRW-'))
       .map(m => m.market);
-    webSocket = new WebSocket('wss://api.upbit.com/websocket/v1');
+    webSocket = new WebSocket('https://api.upbit.com/websocket/v1');
 
 
     webSocket.onopen = () => {
